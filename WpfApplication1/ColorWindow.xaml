@@ -1,0 +1,15 @@
+﻿<Window x:Class="WpfApplication1.ColorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:Coding4Fun.Kinect.Wpf.Controls;assembly=Coding4Fun.Kinect.Wpf"
+        Title="ColorWindow" Width="640" Height="500">
+    <Canvas>
+        <Image x:Name="ColorData"/>
+        <Controls:HoverButton x:Name="AcceptButton" ImageSize="100" 
+                              ImageSource="http://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Button_Icon_Red.svg/300px-Button_Icon_Red.svg.png"  
+                              ActiveImageSource="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Button_Icon_GreenForest.svg/300px-Button_Icon_GreenForest.svg.png"
+                              Canvas.Left="0" Canvas.Top="0" TimeInterval="2000" />
+        <Image x:Name="LeftHand" Source="http://www.kidsme.cn/upfile/Images/2010/20100903155314.jpg" 
+               Canvas.Left="500" Canvas.Top="0" Width="60" Height="60"/>
+    </Canvas>
+</Window>
