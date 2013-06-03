@@ -75,24 +75,27 @@ namespace WpfApplication1
         {
             using (SkeletonFrame skframe = e.OpenSkeletonFrame())
             {
-                if (skframe != null)
-                {
-                    FrameSkeletons = new Skeleton[skframe.SkeletonArrayLength];
-                    skframe.CopySkeletonDataTo(FrameSkeletons);
-                    for (int i = 0; i < FrameSkeletons.Length; i++)
-                    {
-                        if (FrameSkeletons[i].TrackingState == SkeletonTrackingState.Tracked)
-                        {
-                            ColorImagePoint cpl = MapToColorImage(FrameSkeletons[i].Joints[JointType.HandLeft]);
-                            DrawHand(cpl);
-                        }
-                    }
-                }
+                if (skframe == null)
+                    return;
+
+                FrameSkeletons = new Skeleton[skframe.SkeletonArrayLength];
+                skframe.CopySkeletonDataTo(FrameSkeletons);
+
+                Skeleton sk = (from s in FrameSkeletons
+                              where s.TrackingState == SkeletonTrackingState.Tracked
+                              select s).FirstOrDefault() ;
+
+                if (sk == null)
+                    return;
+
+                ColorImagePoint cpl = MapToColorImage(sk.Joints[JointType.HandLeft]);
+                DrawHand(cpl);
             }
         }
+
         ColorImagePoint MapToColorImage(Joint jp)
         {
-            ColorImagePoint cp = kinect.MapSkeletonPointToColor(jp.Position, kinect.ColorStream.Format);
+            ColorImagePoint cp = kinect.CoordinateMapper.MapSkeletonPointToColorPoint(jp.Position, kinect.ColorStream.Format);
             return cp ;
         }
 
@@ -111,18 +114,16 @@ namespace WpfApplication1
             }             
         }
 
-
-
         void myKinect_ColorFrameReady(object sender, ColorImageFrameReadyEventArgs e)
         {
             using (ColorImageFrame frame = e.OpenColorImageFrame())
             {
-                if (frame != null)
-                {
-                    byte[] pixelData = new byte[frame.PixelDataLength];
-                    frame.CopyPixelDataTo(pixelData);
-                    _ColorImageBitmap.WritePixels(_ColorImageBitmapRect, pixelData,_ColorImageStride, 0);
-                }
+                if (frame == null)
+                    return; 
+
+                byte[] pixelData = new byte[frame.PixelDataLength];
+                frame.CopyPixelDataTo(pixelData);
+                _ColorImageBitmap.WritePixels(_ColorImageBitmapRect, pixelData,_ColorImageStride, 0);
             }
         }
 
